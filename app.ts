@@ -2,7 +2,7 @@ const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const dotenv = require('dotenv');
 import { Request, Response } from 'express';
-declare module 'express';
+
 dotenv.config();
 
 const { MONGODB_URI, DATABASE_NAME, COLLECTION_NAME } = process.env;
