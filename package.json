@@ -16,5 +16,17 @@
   "engines": {
     "node": "18.17.1",
     "npm": "9.6.7"
-  }
+  },
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "strict": true
+  },
+  "types": ["node", "express"],
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
