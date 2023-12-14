@@ -4,7 +4,6 @@ const dotenv = require('dotenv');
 import { Request, Response } from 'express';
 
 dotenv.config();
-
 const { MONGODB_URI, DATABASE_NAME, COLLECTION_NAME } = process.env;
 
 const uri = MONGODB_URI;
@@ -12,7 +11,6 @@ const dbName = DATABASE_NAME;
 const collectionName = COLLECTION_NAME;
 
 const app = express();
-const port = 3000;
 
 app.use(express.json());
 
@@ -96,6 +94,7 @@ app.get('/plants/scientific/:scientificName', async (req: Request, res: Response
     await client.close();
   }
 });
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+app.listen(process.env.PORT);
+
+console.log("PORT: " + process.env.PORT);
+
