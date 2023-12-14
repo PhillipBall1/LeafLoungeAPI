@@ -1,6 +1,7 @@
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const dotenv = require('dotenv');
+const cors = require('cors');
 import { Request, Response } from 'express';
 
 dotenv.config();
@@ -11,13 +12,13 @@ const dbName = DATABASE_NAME;
 const collectionName = COLLECTION_NAME;
 
 const app = express();
-
+app.use(cors());
 app.use(express.json());
+
 const client = new MongoClient(uri, { tlsAllowInvalidCertificates: true });
+
 // Get all plants
 app.get('/plants', async (req: Request, res: Response) => {
-  
-
   try {
     await client.connect();
     const database = client.db(dbName);
