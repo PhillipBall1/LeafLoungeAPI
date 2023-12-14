@@ -95,9 +95,6 @@ app.get('/plants/scientific/:scientificName', async (req, res) => {
     await client.close();
   }
 });
-
-// Add similar routes for update and delete operations...
-
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
