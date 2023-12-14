@@ -92,7 +92,7 @@ app.get('/plants/scientific/:scientificName', async (req: Request, res: Response
     await client.close();
   }
 });
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 3000);
 
 console.log("PORT: " + process.env.PORT);
 
