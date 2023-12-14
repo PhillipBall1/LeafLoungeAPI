@@ -56,6 +56,24 @@ app.get('/plants/:id', async (req: Request, res: Response) => {
   }
 });
 
+// Search by plant name
+app.get('/plants/:plantName', async (req: Request, res: Response) => {
+
+  try {
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+
+    const plants = await collection.find({ plant_name: req.params.plantName }).toArray();
+    res.json(plants);
+  } catch (error) {
+    console.error('Error searching plants by family name:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    await client.close();
+  }
+});
+
 // Search by family name
 app.get('/plants/family/:familyName', async (req: Request, res: Response) => {
 
@@ -92,6 +110,79 @@ app.get('/plants/scientific/:scientificName', async (req: Request, res: Response
     await client.close();
   }
 });
+
+// Add a new plant
+app.post('/plants', async (req: Request, res: Response) => {
+  try {
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+
+    const newPlant = req.body;
+    const result = await collection.insertOne(newPlant);
+
+    res.json(result.ops[0]);
+  } catch (error) {
+    console.error('Error adding plant:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    await client.close();
+  }
+});
+
+// Update a plant by ID
+app.put('/plants/:id', async (req: Request, res: Response) => {
+  try {
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+
+    const plantId = req.params.id;
+    const updatedPlant = req.body;
+
+    const result = await collection.findOneAndUpdate(
+      { _id: new ObjectId(plantId) },
+      { $set: updatedPlant },
+      { returnDocument: 'after' }
+    );
+
+    if (!result.value) {
+      res.status(404).json({ error: 'Plant not found' });
+    } else {
+      res.json(result.value);
+    }
+  } catch (error) {
+    console.error('Error updating plant:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    await client.close();
+  }
+});
+
+// Delete a plant by ID
+app.delete('/plants/:id', async (req: Request, res: Response) => {
+  try {
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+
+    const plantId = req.params.id;
+
+    const result = await collection.findOneAndDelete({ _id: new ObjectId(plantId) });
+
+    if (!result.value) {
+      res.status(404).json({ error: 'Plant not found' });
+    } else {
+      res.json({ message: 'Plant deleted successfully' });
+    }
+  } catch (error) {
+    console.error('Error deleting plant:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    await client.close();
+  }
+});
+
 app.listen(process.env.PORT || 3000);
 
 console.log("PORT: " + process.env.PORT);
