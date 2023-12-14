@@ -13,10 +13,10 @@ const collectionName = COLLECTION_NAME;
 const app = express();
 
 app.use(express.json());
-
+const client = new MongoClient(uri, { tlsAllowInvalidCertificates: true });
 // Get all plants
 app.get('/plants', async (req: Request, res: Response) => {
-  const client = new MongoClient(uri);
+  
 
   try {
     await client.connect();
@@ -35,7 +35,6 @@ app.get('/plants', async (req: Request, res: Response) => {
 
 // Get plant by ID
 app.get('/plants/:id', async (req: Request, res: Response) => {
-  const client = new MongoClient(uri);
 
   try {
     await client.connect();
@@ -59,7 +58,6 @@ app.get('/plants/:id', async (req: Request, res: Response) => {
 
 // Search by family name
 app.get('/plants/family/:familyName', async (req: Request, res: Response) => {
-  const client = new MongoClient(uri);
 
   try {
     await client.connect();
