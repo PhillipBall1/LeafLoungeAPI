@@ -1,7 +1,7 @@
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const dotenv = require('dotenv');
-
+import { Request, Response } from 'express';
 dotenv.config();
 
 const { MONGODB_URI, DATABASE_NAME, COLLECTION_NAME } = process.env;
@@ -16,7 +16,7 @@ const port = 3000;
 app.use(express.json());
 
 // Get all plants
-app.get('/plants', async (req, res) => {
+app.get('/plants', async (req: Request, res: Response) => {
   const client = new MongoClient(uri);
 
   try {
@@ -35,7 +35,7 @@ app.get('/plants', async (req, res) => {
 });
 
 // Get plant by ID
-app.get('/plants/:id', async (req, res) => {
+app.get('/plants/:id', async (req: Request, res: Response) => {
   const client = new MongoClient(uri);
 
   try {
@@ -59,7 +59,7 @@ app.get('/plants/:id', async (req, res) => {
 });
 
 // Search by family name
-app.get('/plants/family/:familyName', async (req, res) => {
+app.get('/plants/family/:familyName', async (req: Request, res: Response) => {
   const client = new MongoClient(uri);
 
   try {
@@ -78,7 +78,7 @@ app.get('/plants/family/:familyName', async (req, res) => {
 });
 
 // Search by scientific name
-app.get('/plants/scientific/:scientificName', async (req, res) => {
+app.get('/plants/scientific/:scientificName', async (req: Request, res: Response) => {
   const client = new MongoClient(uri);
 
   try {
