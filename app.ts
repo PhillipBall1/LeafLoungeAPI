@@ -23,6 +23,10 @@ app.get('/plants', async (req: Request, res: Response) => {
     await client.connect();
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
+    
+    
+    //collection.updateMany({}, { $unset: { Featured: 1 } });
+
 
     const documents = await collection.find({}).toArray();
     res.json(documents);
