@@ -61,6 +61,24 @@ app.get('/plants/:id', async (req: Request, res: Response) => {
   }
 });
 
+// Get plants by featured
+app.get('/featured-plants', async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+
+    // Find documents where 'featured' is true
+    const featuredPlants = await collection.find({ featured: true }).toArray();
+    res.json(featuredPlants);
+  } catch (error) {
+    console.error('Error searching for featured plants:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    await client.close();
+  }
+});
+
 // Search by plant name
 app.get('/plants/:plantName', async (req: Request, res: Response) => {
 
