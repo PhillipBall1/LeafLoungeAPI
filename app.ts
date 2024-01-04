@@ -28,7 +28,6 @@ async function updateDatabase() {
     //await collection.updateMany({}, { $set: { 'variable name': 'variable value' } });
     //To remove
     //await collection.updateMany({}, { $unset: { 'variable name': 1 } });
-
   } catch (error) {
     console.error('Error updating database:', error);
     throw error;
@@ -95,6 +94,40 @@ app.get('/featured-plants', async (req, res) => {
   }
 });
 
+// Get plants by indoor
+app.get('/indoor-plants', async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+
+    const indoorPlants = await collection.find({ indoor: true }).toArray();
+    res.json(indoorPlants);
+  } catch (error) {
+    console.error('Error searching for indoor plants:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    await client.close();
+  }
+});
+
+// Get plants by edible
+app.get('/edible-plants', async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+
+    const ediblePlants = await collection.find({ edible: true }).toArray();
+    res.json(ediblePlants);
+  } catch (error) {
+    console.error('Error searching for edible plants:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    await client.close();
+  }
+});
+
 // Search by plant name
 app.get('/plants/:plantName', async (req: Request, res: Response) => {
 
@@ -107,6 +140,24 @@ app.get('/plants/:plantName', async (req: Request, res: Response) => {
     res.json(plants);
   } catch (error) {
     console.error('Error searching plants by family name:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  } finally {
+    await client.close();
+  }
+});
+
+// Search by plant difficulty
+app.get('/plants/difficulty/:plantDifficulty', async (req: Request, res: Response) => {
+
+  try {
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+
+    const plants = await collection.find({ difficulty: req.params.plantDifficulty }).toArray();
+    res.json(plants);
+  } catch (error) {
+    console.error('Error searching plants by difficulty:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   } finally {
     await client.close();
