@@ -17,17 +17,34 @@ app.use(express.json());
 
 const client = new MongoClient(uri, { tlsAllowInvalidCertificates: true });
 
+// Used to update rows/columns of the database
+async function updateDatabase() {
+  try {
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
+    
+    //To add
+    //await collection.updateMany({}, { $set: { 'variable name': 'variable value' } });
+    //To remove
+    //await collection.updateMany({}, { $unset: { 'variable name': 1 } });
+
+  } catch (error) {
+    console.error('Error updating database:', error);
+    throw error;
+  } finally {
+    await client.close();
+  }
+}
+
+updateDatabase();
+
 // Get all plants
 app.get('/plants', async (req: Request, res: Response) => {
   try {
     await client.connect();
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
-    
-    
-    //collection.updateMany({}, { $unset: { Featured: 1 } });
-
-
     const documents = await collection.find({}).toArray();
     res.json(documents);
   } catch (error) {
@@ -68,7 +85,6 @@ app.get('/featured-plants', async (req, res) => {
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
 
-    // Find documents where 'featured' is true
     const featuredPlants = await collection.find({ featured: true }).toArray();
     res.json(featuredPlants);
   } catch (error) {
