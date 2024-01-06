@@ -59,8 +59,6 @@ app.get('/plants', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error retrieving plants:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -78,8 +76,6 @@ app.get('/plants/:id', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error retrieving plant by ID:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -92,8 +88,6 @@ app.get('/featured-plants', async (req, res) => {
   } catch (error) {
     console.error('Error searching for featured plants:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -106,8 +100,6 @@ app.get('/indoor-plants', async (req, res) => {
   } catch (error) {
     console.error('Error searching for indoor plants:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -120,8 +112,6 @@ app.get('/edible-plants', async (req, res) => {
   } catch (error) {
     console.error('Error searching for edible plants:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -134,8 +124,6 @@ app.get('/plants/:plantName', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error searching plants by family name:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -148,8 +136,6 @@ app.get('/plants/difficulty/:plantDifficulty', async (req: Request, res: Respons
   } catch (error) {
     console.error('Error searching plants by difficulty:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -162,8 +148,6 @@ app.get('/plants/family/:familyName', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error searching plants by family name:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -177,8 +161,6 @@ app.get('/plants/scientific/:scientificName', async (req: Request, res: Response
   } catch (error) {
     console.error('Error searching plants by scientific name:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -193,8 +175,6 @@ app.post('/plants', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error adding plant:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -219,8 +199,6 @@ app.put('/plants/:id', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error updating plant:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
@@ -237,8 +215,6 @@ app.delete('/plants/:id', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error deleting plant:', error);
     res.status(500).json({ error: 'Internal Server Error' });
-  } finally {
-    await client.close();
   }
 });
 
