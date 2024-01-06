@@ -184,6 +184,8 @@ app.put('/plants/:id', async (req: Request, res: Response) => {
     const plantId = req.params.id;
     const updatedPlant = req.body;
 
+    delete updatedPlant._id;
+
     const collection = database.collection(plantCollectionName);
     const result = await collection.findOneAndUpdate(
       { _id: new ObjectId(plantId) },
@@ -201,6 +203,7 @@ app.put('/plants/:id', async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 // Delete a plant by ID
 app.delete('/plants/:id', async (req: Request, res: Response) => {
