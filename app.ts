@@ -171,7 +171,9 @@ app.post('/plants', async (req: Request, res: Response) => {
     const collection = database.collection(plantCollectionName);
     const result = await collection.insertOne(newPlant);
 
-    res.json(result.ops[0]);
+    const insertedId = result.insertedId;
+    const insertedDocument = await collection.findOne({ _id: insertedId });
+    res.json(insertedDocument);
   } catch (error) {
     console.error('Error adding plant:', error);
     res.status(500).json({ error: 'Internal Server Error' });
