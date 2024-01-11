@@ -10,8 +10,7 @@ import { config } from '../config';
 router.post('/register', async (req, res) => {
     try {
       const userCollection = db.getUserCollection();
-      const collection = userCollection.collection(config.userCollectionName);
-      const existingUser = await collection.findOne({ username: req.body.username });
+      const existingUser = await userCollection.findOne({ username: req.body.username });
       if (existingUser) {
         return res.status(400).json({ error: 'User already exists' });
       }
@@ -19,7 +18,7 @@ router.post('/register', async (req, res) => {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
   
       const user = { username: req.body.username, password: hashedPassword };
-      await collection.insertOne(user);
+      await userCollection.insertOne(user);
   
       const createdUser = { ...user, password: undefined };
       res.status(201).json(createdUser);
@@ -33,9 +32,8 @@ router.post('/register', async (req, res) => {
     try {
       const userCollection = db.getUserCollection();
       const { username, password } = req.body;
-      const collection = userCollection.collection(config.userCollectionName);
   
-      const user = await collection.findOne({ username });
+      const user = await userCollection.findOne({ username });
       if (!user) {
         return res.status(400).json({ error: 'Invalid username or password' });
       }
