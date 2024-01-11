@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 const userCollection = db.getUserCollection();
 
-router.post('/users/register', async (req, res) => {
+router.post('/register', async (req, res) => {
     try {
       const collection = userCollection.collection(config.userCollectionName);
       const existingUser = await collection.findOne({ username: req.body.username });
@@ -26,7 +26,7 @@ router.post('/users/register', async (req, res) => {
     }
   });
   
-  router.post('/users/login', async (req: Request, res: Response) => {
+  router.post('/login', async (req: Request, res: Response) => {
     try {
       const { username, password } = req.body;
       const collection = userCollection.collection(config.userCollectionName);

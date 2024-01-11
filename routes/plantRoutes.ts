@@ -1,14 +1,11 @@
 import { ObjectId } from "mongodb";
-
-const express = require('express');
 import { Request, Response } from 'express';
 
+const express = require('express');
 const router = express.Router();
-
 const plantCollection = db.getPlantCollection();
-const userCollection = db.getUserCollection();
 
-router.get('/plants', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const plants = await plantCollection.find({}).toArray();
     res.json(plants);
@@ -68,7 +65,7 @@ router.get('/edible-plants', async (req, res) => {
 });
 
 // Search by plant name
-router.get('/plants/plant/:plantName', async (req, res) => {
+router.get('/plant/:plantName', async (req, res) => {
   try {
     const collection = plantCollection.collection(config.plantCollectionName);
     const searchRegex = new RegExp(req.params.plantName, 'i');
@@ -82,7 +79,7 @@ router.get('/plants/plant/:plantName', async (req, res) => {
 
 
 // Search by plant difficulty
-router.get('/plants/difficulty/:plantDifficulty', async (req: Request, res: Response) => {
+router.get('/difficulty/:plantDifficulty', async (req: Request, res: Response) => {
   try {
     const collection = plantCollection.collection(config.plantCollectionName);
     const plants = await collection.find({ difficulty: req.params.plantDifficulty }).toArray();
@@ -94,7 +91,7 @@ router.get('/plants/difficulty/:plantDifficulty', async (req: Request, res: Resp
 });
 
 // Search by family name
-router.get('/plants/family/:familyName', async (req: Request, res: Response) => {
+router.get('/family/:familyName', async (req: Request, res: Response) => {
   try {
     const collection = plantCollection.collection(config.plantCollectionName);
     const plants = await collection.find({ family_name: req.params.familyName }).toArray();
@@ -106,7 +103,7 @@ router.get('/plants/family/:familyName', async (req: Request, res: Response) => 
 });
 
 // Search by scientific name
-router.get('/plants/scientific/:scientificName', async (req: Request, res: Response) => {
+router.get('/scientific/:scientificName', async (req: Request, res: Response) => {
   try {
     const collection = plantCollection.collection(config.plantCollectionName);
     const plants = await collection.find({ scientific_name: req.params.scientificName }).toArray();
@@ -118,7 +115,7 @@ router.get('/plants/scientific/:scientificName', async (req: Request, res: Respo
 });
 
 // Add a new plant
-router.post('/plants', async (req: Request, res: Response) => {
+router.post('', async (req: Request, res: Response) => {
   try {
     const newPlant = req.body;
     const collection = plantCollection.collection(config.plantCollectionName);
@@ -134,7 +131,7 @@ router.post('/plants', async (req: Request, res: Response) => {
 });
 
 // Update a plant by ID
-router.put('/plants/:id', async (req: Request, res: Response) => {
+router.put('/:id', async (req: Request, res: Response) => {
   try {
     const plantId = req.params.id;
     const updatedPlant = req.body;
@@ -161,7 +158,7 @@ router.put('/plants/:id', async (req: Request, res: Response) => {
 
 
 // Delete a plant by ID
-router.delete('/plants/:id', async (req: Request, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
   try {
     const result = await plantCollection.findOneAndDelete({ _id: new ObjectId(req.params.id) });
     if (!result.value) {

@@ -11,8 +11,8 @@ app.use(express.json());
 
 // Establish a connection to MongoDB
 db.connect().then(() => {
-  app.use('', plantRoutes);
-  app.use('', userRoutes);
+  app.use('/plants', plantRoutes);
+  app.use('/users', userRoutes);
   app.listen(config.port, () => {
     console.log(`Server listening on port ${config.port}`);
   });
