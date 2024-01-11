@@ -2,18 +2,21 @@ const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 import { Request, Response } from 'express';
+const jwt = require('jsonwebtoken');
 
+const app = express();
 dotenv.config();
-const { MONGODB_URI, DATABASE_NAME, PLANT_COLLECTION_NAME } = process.env;
+app.use(cors());
+app.use(express.json());
+
+const { MONGODB_URI, DATABASE_NAME, PLANT_COLLECTION_NAME, USER_COLLECTION_NAME } = process.env;
 
 const uri = MONGODB_URI;
 const dbName = DATABASE_NAME;
 const plantCollectionName = PLANT_COLLECTION_NAME;
-
-const app = express();
-app.use(cors());
-app.use(express.json());
+const userCollectionName = USER_COLLECTION_NAME;
 
 const client = new MongoClient(uri, { tlsAllowInvalidCertificates: true });
 
@@ -155,7 +158,6 @@ app.get('/plants/family/:familyName', async (req: Request, res: Response) => {
 
 // Search by scientific name
 app.get('/plants/scientific/:scientificName', async (req: Request, res: Response) => {
-  const client = new MongoClient(uri);
   try {
     const collection = database.collection(plantCollectionName);
     const plants = await collection.find({ scientific_name: req.params.scientificName }).toArray();
@@ -221,6 +223,56 @@ app.delete('/plants/:id', async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.error('Error deleting plant:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/users/register', async (req, res) => {
+  try {
+    const collection = database.collection(userCollectionName);
+    const existingUser = await collection.findOne({ username: req.body.username });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    const user = { username: req.body.username, password: hashedPassword };
+    await collection.insertOne(user);
+
+    const createdUser = { ...user, password: undefined };
+    res.status(201).json(createdUser);
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/users/login', async (req: Request, res: Response) => {
+  try {
+    const { username, password } = req.body;
+    const collection = database.collection(userCollectionName);
+
+    const user = await collection.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid username or password' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Invalid username or password' });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id }, 
+      process.env.JWT_SECRET as string,
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token });
+
+  } catch (error) {
+    console.error('Error during login:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
