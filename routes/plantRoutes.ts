@@ -6,7 +6,7 @@ const express = require('express');
 const router = express.Router();
 
 
-router.get('/', async (req, res) => {
+router.get('/plants', async (req, res) => {
   try {
     const plantCollection = db.getPlantCollection();
     const plants = await plantCollection.find({}).toArray();
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get plant by ID
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/plants/:id', async (req: Request, res: Response) => {
   try {
     const plantCollection = db.getPlantCollection();
     const plant = await plantCollection.findOne({ _id: new ObjectId(req.params.id) });
@@ -125,7 +125,7 @@ router.get('/scientific/:scientificName', async (req: Request, res: Response) =>
 });
 
 // Add a new plant
-router.post('', async (req: Request, res: Response) => {
+router.post('/plants', async (req: Request, res: Response) => {
   try {
     const plantCollection = db.getPlantCollection();
     const newPlant = req.body;
@@ -142,7 +142,7 @@ router.post('', async (req: Request, res: Response) => {
 });
 
 // Update a plant by ID
-router.put('/:id', async (req: Request, res: Response) => {
+router.put('/plants/:id', async (req: Request, res: Response) => {
   try {
     const plantId = req.params.id;
     const updatedPlant = req.body;
@@ -169,7 +169,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 
 
 // Delete a plant by ID
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/plants/:id', async (req: Request, res: Response) => {
   try {
     const plantCollection = db.getPlantCollection();
     const result = await plantCollection.findOneAndDelete({ _id: new ObjectId(req.params.id) });

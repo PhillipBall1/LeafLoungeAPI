@@ -18,8 +18,8 @@ async function startServer() {
     console.log('Database connected successfully');
 
     // Set up routes after the database connection is established
-    app.use('/plants', plantRoutes);
-    app.use('/users', userRoutes);
+    app.use('/API', plantRoutes);
+    app.use('/API', userRoutes);
 
     // Start the server
     app.listen(config.port, () => {
