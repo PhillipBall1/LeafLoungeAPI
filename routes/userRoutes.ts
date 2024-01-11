@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const express = require('express');
+const db = require('../database/db');
 const router = express.Router();
 const userCollection = db.getUserCollection();
+import { config } from '../config';
 
 router.post('/register', async (req, res) => {
     try {

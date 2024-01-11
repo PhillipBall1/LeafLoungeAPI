@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import { Request, Response } from 'express';
-
+import { config } from '../config';
+const db = require('../database/db');
 const express = require('express');
 const router = express.Router();
 const plantCollection = db.getPlantCollection();

@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb');
-
+import { config } from '../config';
 let db = null;
 
 // Initialize MongoDB Client

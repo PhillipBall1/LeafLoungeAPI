@@ -3,7 +3,9 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const plantRoutes = require('./routes/plantRoutes');
 const userRoutes = require('./routes/userRoutes');
+const db = require('../database/db');
 const app = express();
+import { config } from './config';
 
 dotenv.config();
 
@@ -37,4 +39,7 @@ process.on('SIGTERM', async () => {
   console.log('Closing MongoDB connection');
   await db.close();
   process.exit(0);
+});
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
 });
