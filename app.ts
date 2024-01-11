@@ -11,10 +11,10 @@ dotenv.config();
 
 const corsOptions = {
   origin: ['http://localhost:4200', 'https://phillipball1.github.io'],
-  optionsSuccessStatus: 200 
+  optionsSuccessStatus: 200,
+  credentials: true,
 };
 
-app.options('*', cors());
 app.use(cors(corsOptions));
 app.use(express.json());
 
