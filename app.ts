@@ -1,9 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const plantRoutes = require('./routes/plantRoutes'); // Import the plant routes module
+const plantRoutes = require('./routes/plantRoutes');
 const userRoutes = require('./routes/userRoutes');
-
 const app = express();
 dotenv.config();
 app.use(cors());
