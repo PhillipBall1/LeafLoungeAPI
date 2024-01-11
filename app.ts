@@ -116,7 +116,7 @@ app.get('/edible-plants', async (req, res) => {
 });
 
 // Search by plant name
-app.get('/plants/:plantName', async (req: Request, res: Response) => {
+app.get('/plants/plant/:plantName', async (req: Request, res: Response) => {
   try {
     const collection = database.collection(plantCollectionName);
     const plants = await collection.find({ plant_name: req.params.plantName }).toArray();
