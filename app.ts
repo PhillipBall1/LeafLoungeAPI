@@ -10,7 +10,7 @@ import { config } from './config';
 dotenv.config();
 
 const corsOptions = {
-  origin: ['http://localhost:4200', 'https://phillipball1.github.io'],
+  origin: ['http://localhost:4200', 'https://phillipball1.github.io', config.heroku],
   optionsSuccessStatus: 200,
   credentials: true,
 };

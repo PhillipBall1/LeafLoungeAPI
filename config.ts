@@ -9,4 +9,5 @@ export const config = {
   userCollectionName: process.env.USER_COLLECTION_NAME,
   jwtSecret: process.env.JWT_SECRET,
   port: process.env.PORT || '3000',
+  heroku: process.env.HEROKU,
 };
