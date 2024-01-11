@@ -4,10 +4,11 @@ import { config } from '../config';
 const db = require('../database/db');
 const express = require('express');
 const router = express.Router();
-const plantCollection = db.getPlantCollection();
+
 
 router.get('/', async (req, res) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const plants = await plantCollection.find({}).toArray();
     res.json(plants);
   } catch (error) {
@@ -18,6 +19,7 @@ router.get('/', async (req, res) => {
 // Get plant by ID
 router.get('/:id', async (req: Request, res: Response) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const plant = await plantCollection.findOne({ _id: new ObjectId(req.params.id) });
     if (!plant) {
       res.status(404).json({ error: 'Plant not found' });
@@ -33,6 +35,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 // Get plants by featured
 router.get('/featured-plants', async (req, res) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const featuredPlants = await plantCollection.find({ featured: true }).toArray();
     res.json(featuredPlants);
   } catch (error) {
@@ -44,6 +47,7 @@ router.get('/featured-plants', async (req, res) => {
 // Get plants by indoor
 router.get('/indoor-plants', async (req, res) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const collection = plantCollection.collection(config.plantCollectionName);
     const indoorPlants = await collection.find({ indoor: true }).toArray();
     res.json(indoorPlants);
@@ -56,6 +60,7 @@ router.get('/indoor-plants', async (req, res) => {
 // Get plants by edible
 router.get('/edible-plants', async (req, res) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const collection = plantCollection.collection(config.plantCollectionName);
     const ediblePlants = await collection.find({ edible: true }).toArray();
     res.json(ediblePlants);
@@ -68,6 +73,7 @@ router.get('/edible-plants', async (req, res) => {
 // Search by plant name
 router.get('/plant/:plantName', async (req, res) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const collection = plantCollection.collection(config.plantCollectionName);
     const searchRegex = new RegExp(req.params.plantName, 'i');
     const plants = await collection.find({ plant_name: { $regex: searchRegex } }).toArray();
@@ -82,6 +88,7 @@ router.get('/plant/:plantName', async (req, res) => {
 // Search by plant difficulty
 router.get('/difficulty/:plantDifficulty', async (req: Request, res: Response) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const collection = plantCollection.collection(config.plantCollectionName);
     const plants = await collection.find({ difficulty: req.params.plantDifficulty }).toArray();
     res.json(plants);
@@ -94,6 +101,7 @@ router.get('/difficulty/:plantDifficulty', async (req: Request, res: Response) =
 // Search by family name
 router.get('/family/:familyName', async (req: Request, res: Response) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const collection = plantCollection.collection(config.plantCollectionName);
     const plants = await collection.find({ family_name: req.params.familyName }).toArray();
     res.json(plants);
@@ -106,6 +114,7 @@ router.get('/family/:familyName', async (req: Request, res: Response) => {
 // Search by scientific name
 router.get('/scientific/:scientificName', async (req: Request, res: Response) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const collection = plantCollection.collection(config.plantCollectionName);
     const plants = await collection.find({ scientific_name: req.params.scientificName }).toArray();
     res.json(plants);
@@ -118,6 +127,7 @@ router.get('/scientific/:scientificName', async (req: Request, res: Response) =>
 // Add a new plant
 router.post('', async (req: Request, res: Response) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const newPlant = req.body;
     const collection = plantCollection.collection(config.plantCollectionName);
     const result = await collection.insertOne(newPlant);
@@ -138,7 +148,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     const updatedPlant = req.body;
 
     delete updatedPlant._id;
-
+    const plantCollection = db.getPlantCollection();
     const collection = plantCollection.collection(config.plantCollectionName);
     const result = await collection.findOneAndUpdate(
       { _id: new ObjectId(plantId) },
@@ -161,6 +171,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 // Delete a plant by ID
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
+    const plantCollection = db.getPlantCollection();
     const result = await plantCollection.findOneAndDelete({ _id: new ObjectId(req.params.id) });
     if (!result.value) {
       res.status(404).json({ error: 'Plant not found' });

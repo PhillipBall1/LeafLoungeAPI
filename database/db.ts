@@ -8,15 +8,17 @@ const client = new MongoClient(config.mongodbUri, { tlsAllowInvalidCertificates:
 // Establish a connection to MongoDB
 async function connect() {
     try {
+        console.log('Attempting to connect to MongoDB');
         await client.connect();
         console.log('Connected to MongoDB');
         db = client.db(config.dbName);
+        console.log('Database object set');
     }
     catch (error) {
         console.error('Could not connect to MongoDB', error);
         process.exit(1);
     }
-}
+  }
 
 // Function to get the database object
 function getDb() {

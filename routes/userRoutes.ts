@@ -4,11 +4,12 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const db = require('../database/db');
 const router = express.Router();
-const userCollection = db.getUserCollection();
 import { config } from '../config';
+
 
 router.post('/register', async (req, res) => {
     try {
+      const userCollection = db.getUserCollection();
       const collection = userCollection.collection(config.userCollectionName);
       const existingUser = await collection.findOne({ username: req.body.username });
       if (existingUser) {
@@ -30,6 +31,7 @@ router.post('/register', async (req, res) => {
   
   router.post('/login', async (req: Request, res: Response) => {
     try {
+      const userCollection = db.getUserCollection();
       const { username, password } = req.body;
       const collection = userCollection.collection(config.userCollectionName);
   
