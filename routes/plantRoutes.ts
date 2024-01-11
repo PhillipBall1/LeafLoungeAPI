@@ -48,8 +48,7 @@ router.get('/featured-plants', async (req, res) => {
 router.get('/indoor-plants', async (req, res) => {
   try {
     const plantCollection = db.getPlantCollection();
-    const collection = plantCollection.collection(config.plantCollectionName);
-    const indoorPlants = await collection.find({ indoor: true }).toArray();
+    const indoorPlants = await plantCollection.find({ indoor: true }).toArray();
     res.json(indoorPlants);
   } catch (error) {
     console.error('Error searching for indoor plants:', error);
@@ -61,8 +60,7 @@ router.get('/indoor-plants', async (req, res) => {
 router.get('/edible-plants', async (req, res) => {
   try {
     const plantCollection = db.getPlantCollection();
-    const collection = plantCollection.collection(config.plantCollectionName);
-    const ediblePlants = await collection.find({ edible: true }).toArray();
+    const ediblePlants = await plantCollection.find({ edible: true }).toArray();
     res.json(ediblePlants);
   } catch (error) {
     console.error('Error searching for edible plants:', error);
@@ -74,9 +72,8 @@ router.get('/edible-plants', async (req, res) => {
 router.get('/plant/:plantName', async (req, res) => {
   try {
     const plantCollection = db.getPlantCollection();
-    const collection = plantCollection.collection(config.plantCollectionName);
     const searchRegex = new RegExp(req.params.plantName, 'i');
-    const plants = await collection.find({ plant_name: { $regex: searchRegex } }).toArray();
+    const plants = await plantCollection.find({ plant_name: { $regex: searchRegex } }).toArray();
     res.json(plants);
   } catch (error) {
     console.error('Error searching plants by name:', error);
@@ -89,8 +86,7 @@ router.get('/plant/:plantName', async (req, res) => {
 router.get('/difficulty/:plantDifficulty', async (req: Request, res: Response) => {
   try {
     const plantCollection = db.getPlantCollection();
-    const collection = plantCollection.collection(config.plantCollectionName);
-    const plants = await collection.find({ difficulty: req.params.plantDifficulty }).toArray();
+    const plants = await plantCollection.find({ difficulty: req.params.plantDifficulty }).toArray();
     res.json(plants);
   } catch (error) {
     console.error('Error searching plants by difficulty:', error);
@@ -102,8 +98,7 @@ router.get('/difficulty/:plantDifficulty', async (req: Request, res: Response) =
 router.get('/family/:familyName', async (req: Request, res: Response) => {
   try {
     const plantCollection = db.getPlantCollection();
-    const collection = plantCollection.collection(config.plantCollectionName);
-    const plants = await collection.find({ family_name: req.params.familyName }).toArray();
+    const plants = await plantCollection.find({ family_name: req.params.familyName }).toArray();
     res.json(plants);
   } catch (error) {
     console.error('Error searching plants by family name:', error);
@@ -115,8 +110,7 @@ router.get('/family/:familyName', async (req: Request, res: Response) => {
 router.get('/scientific/:scientificName', async (req: Request, res: Response) => {
   try {
     const plantCollection = db.getPlantCollection();
-    const collection = plantCollection.collection(config.plantCollectionName);
-    const plants = await collection.find({ scientific_name: req.params.scientificName }).toArray();
+    const plants = await plantCollection.find({ scientific_name: req.params.scientificName }).toArray();
     res.json(plants);
   } catch (error) {
     console.error('Error searching plants by scientific name:', error);
@@ -129,11 +123,10 @@ router.post('/plants', async (req: Request, res: Response) => {
   try {
     const plantCollection = db.getPlantCollection();
     const newPlant = req.body;
-    const collection = plantCollection.collection(config.plantCollectionName);
-    const result = await collection.insertOne(newPlant);
+    const result = await plantCollection.insertOne(newPlant);
 
     const insertedId = result.insertedId;
-    const insertedDocument = await collection.findOne({ _id: insertedId });
+    const insertedDocument = await plantCollection.findOne({ _id: insertedId });
     res.json(insertedDocument);
   } catch (error) {
     console.error('Error adding plant:', error);
@@ -149,8 +142,7 @@ router.put('/plants/:id', async (req: Request, res: Response) => {
 
     delete updatedPlant._id;
     const plantCollection = db.getPlantCollection();
-    const collection = plantCollection.collection(config.plantCollectionName);
-    const result = await collection.findOneAndUpdate(
+    const result = await plantCollection.findOneAndUpdate(
       { _id: new ObjectId(plantId) },
       { $set: updatedPlant },
       { returnDocument: 'after' }
