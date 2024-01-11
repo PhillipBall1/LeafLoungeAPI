@@ -4,8 +4,16 @@ const cors = require('cors');
 const plantRoutes = require('./routes/plantRoutes');
 const userRoutes = require('./routes/userRoutes');
 const app = express();
+
 dotenv.config();
-app.use(cors());
+
+const corsOptions = {
+  origin: ['http://localhost:4200', 'https://phillipball1.github.io'],
+  optionsSuccessStatus: 200 
+};
+
+app.options('*', cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Establish a connection to MongoDB
