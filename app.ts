@@ -1,8 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const plantRoutes = require('./routes/plantRoutes'); // Import the plant routes module
 const userRoutes = require('./routes/userRoutes');
 
@@ -13,8 +11,8 @@ app.use(express.json());
 
 // Establish a connection to MongoDB
 db.connect().then(() => {
-  app.use('/plants', plantRoutes);
-  app.use('/users', userRoutes);
+  app.use('', plantRoutes);
+  app.use('', userRoutes);
   app.listen(config.port, () => {
     console.log(`Server listening on port ${config.port}`);
   });
