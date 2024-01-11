@@ -116,16 +116,18 @@ app.get('/edible-plants', async (req, res) => {
 });
 
 // Search by plant name
-app.get('/plants/plant/:plantName', async (req: Request, res: Response) => {
+app.get('/plants/plant/:plantName', async (req, res) => {
   try {
     const collection = database.collection(plantCollectionName);
-    const plants = await collection.find({ plant_name: req.params.plantName }).toArray();
+    const searchRegex = new RegExp(req.params.plantName, 'i');
+    const plants = await collection.find({ plant_name: { $regex: searchRegex } }).toArray();
     res.json(plants);
   } catch (error) {
-    console.error('Error searching plants by family name:', error);
+    console.error('Error searching plants by name:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 // Search by plant difficulty
 app.get('/plants/difficulty/:plantDifficulty', async (req: Request, res: Response) => {
