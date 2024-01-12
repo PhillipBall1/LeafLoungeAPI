@@ -141,7 +141,7 @@ router.post('/register', async (req, res) => {
         const userCollection = db.getUserCollection();
         const updateResult = await userCollection.updateOne(
             { _id: new ObjectId(userId) },
-            { $pull: { cart: { plantId: new ObjectId(plantId) } } }
+            { $pull: { cart: { plantId: plantId } } } 
         );
 
         if (!updateResult.matchedCount) {
@@ -154,8 +154,5 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
   });
-
-
-  
 
   module.exports = router;
