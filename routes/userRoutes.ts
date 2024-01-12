@@ -76,5 +76,34 @@ router.post('/register', async (req, res) => {
     }
   });
 
+  router.put('/user/:userId/cart', async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const plantToAdd = req.body;
+  
+      if (!ObjectId.isValid(userId)) {
+        return res.status(400).send('Invalid user ID');
+      }
+  
+      const userCollection = db.getUserCollection();
+      const updateResult = await userCollection.updateOne(
+        { _id: new ObjectId(userId) },
+        { $push: { cart: plantToAdd } }
+      );
+  
+      if (!updateResult.matchedCount) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      if (!updateResult.modifiedCount) {
+        return res.status(400).json({ error: 'Failed to add plant to cart' });
+      }
+  
+      res.json({ message: 'Plant added to cart successfully' });
+    } catch (error) {
+      console.error('Error adding plant to user cart:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
 
 module.exports = router;
