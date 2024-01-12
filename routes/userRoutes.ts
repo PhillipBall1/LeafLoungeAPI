@@ -57,27 +57,20 @@ router.post('/register', async (req, res) => {
     }
   });
 
-  router.get('/user/:id', async (req: Request, res: Response) => {
+  router.get('/user/:userId', async (req, res) => {
     try {
-        const userCollection = db.getUserCollection();
-        const userId = req.params.id;
-
-        const user = await userCollection.findOne({ _id: new ObjectId(userId) });
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        const userResponse = {
-            username: user.username,
-            admin: user.admin
-        };
-
-        res.json(userResponse);
+      const userId = req.params.userId;
+      const userCollection = db.getUserCollection();
+      const user = await userCollection.findOne({ _id: new ObjectId(userId) }).select('-password');
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(user);
     } catch (error) {
-        console.error('Error fetching user by ID:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+      console.error('Error getting user details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-});
+  });
 
 
 module.exports = router;
