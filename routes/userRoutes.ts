@@ -17,10 +17,10 @@ router.post('/register', async (req, res) => {
   
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
   
-      const user = { username: req.body.username, password: hashedPassword };
+      const user = { username: req.body.username, password: hashedPassword, admin: req.body.admin };
       await userCollection.insertOne(user);
   
-      const createdUser = { ...user, password: undefined };
+      const createdUser = { ...user, password: undefined, admin: false };
       res.status(201).json(createdUser);
     } catch (error) {
       console.error('Error registering user:', error);
@@ -65,7 +65,7 @@ router.post('/register', async (req, res) => {
         return res.status(400).send('Invalid user ID');
       }
       const userCollection = db.getUserCollection();
-      const user = await userCollection.findOne({ _id: new ObjectId(userId) }).select('-password');
+      const user = await userCollection.findOne({ _id: new ObjectId(userId) }, { projection: { password: 0 } });
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
