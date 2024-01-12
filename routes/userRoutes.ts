@@ -130,6 +130,32 @@ router.post('/register', async (req, res) => {
     }
   });
 
+  router.delete('/user/:userId/cart/:plantId', async (req, res) => {
+    try {
+        const { userId, plantId } = req.params;
+
+        if (!ObjectId.isValid(userId) || !ObjectId.isValid(plantId)) {
+            return res.status(400).send('Invalid IDs');
+        }
+
+        const userCollection = db.getUserCollection();
+        const updateResult = await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $pull: { cart: { plantId: new ObjectId(plantId) } } }
+        );
+
+        if (!updateResult.matchedCount) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({ message: 'Item removed from cart successfully' });
+    } catch (error) {
+        console.error('Error removing item from cart:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+
   
 
   module.exports = router;
