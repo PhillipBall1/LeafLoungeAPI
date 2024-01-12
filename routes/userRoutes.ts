@@ -104,6 +104,32 @@ router.post('/register', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
+  router.get('/user/:userId/cart', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+
+        if (!ObjectId.isValid(userId)) {
+            return res.status(400).send('Invalid user ID');
+        }
+
+        const userCollection = db.getUserCollection();
+        const user = await userCollection.findOne(
+            { _id: new ObjectId(userId) },
+            { projection: { cart: 1 } } 
+        );
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json(user.cart); 
+    } catch (error) {
+        console.error('Error fetching user cart:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
   
 
-module.exports = router;
+  module.exports = router;
