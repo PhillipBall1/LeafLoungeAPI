@@ -44,10 +44,11 @@ router.post('/register', async (req, res) => {
       }
   
       const token = jwt.sign(
-        { userId: user._id }, 
+        { userId: user._id, admin: user.admin }, 
         process.env.JWT_SECRET as string,
         { expiresIn: '1h' }
       );
+      
   
       res.json({ token });
   
@@ -60,6 +61,9 @@ router.post('/register', async (req, res) => {
   router.get('/user/:userId', async (req, res) => {
     try {
       const userId = req.params.userId;
+      if (!ObjectId.isValid(userId)) {
+        return res.status(400).send('Invalid user ID');
+      }
       const userCollection = db.getUserCollection();
       const user = await userCollection.findOne({ _id: new ObjectId(userId) }).select('-password');
       if (!user) {
