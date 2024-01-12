@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
+import { ObjectId } from 'mongodb';
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const db = require('../database/db');
 const router = express.Router();
-import { config } from '../config';
 
 
 router.post('/register', async (req, res) => {
@@ -56,5 +56,28 @@ router.post('/register', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
+  router.get('/user/:id', async (req: Request, res: Response) => {
+    try {
+        const userCollection = db.getUserCollection();
+        const userId = req.params.id;
+
+        const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const userResponse = {
+            username: user.username,
+            admin: user.admin
+        };
+
+        res.json(userResponse);
+    } catch (error) {
+        console.error('Error fetching user by ID:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 module.exports = router;
