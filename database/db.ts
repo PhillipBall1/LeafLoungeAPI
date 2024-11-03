@@ -9,7 +9,7 @@ async function connect() {
         console.log('Attempting to connect to MongoDB');
         await client.connect();
         console.log('Connected to MongoDB');
-        db = client.db(config.dbName);
+        db = client.db("fullstack");
         console.log('Database object set');
     }
     catch (error) {
