@@ -1,13 +1,15 @@
-const express = require('express');
+
 const dotenv = require('dotenv');
+dotenv.config();
+
+const express = require('express');
+import { config } from './config';
 const cors = require('cors');
 const plantRoutes = require('./routes/plantRoutes');
 const userRoutes = require('./routes/userRoutes');
 const db = require('./database/db');
 const app = express();
-import { config } from './config';
 
-dotenv.config();
 
 app.use(cors());
 app.use(express.json());
