@@ -29,14 +29,14 @@ function getUserCollection() {
     if (!db) {
         throw new Error('No database connected!');
     }
-    return db.collection(config.userCollectionName);
+    return db.collection("users");
 }
 
 function getPlantCollection() {
     if (!db) {
         throw new Error('No database connected!');
     }
-    return db.collection(config.plantCollectionName);
+    return db.collection("plants");
 }
 
 async function close() {
