@@ -46,7 +46,7 @@ router.post('/register', async (req, res) => {
   
       const token = jwt.sign(
         { userId: user._id, admin: user.admin }, 
-        config.jwtSecret as string,
+        "RejfFLso93nFL6sP20382KEYkf89d0",
         { expiresIn: '1h' }
       );
       
