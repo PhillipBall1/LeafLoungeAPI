@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const db = require('../database/db');
 const router = express.Router();
+import { config } from '../config';
 
 
 router.post('/register', async (req, res) => {
@@ -45,7 +46,7 @@ router.post('/register', async (req, res) => {
   
       const token = jwt.sign(
         { userId: user._id, admin: user.admin }, 
-        process.env.JWT_SECRET as string,
+        config.jwtSecret as string,
         { expiresIn: '1h' }
       );
       
