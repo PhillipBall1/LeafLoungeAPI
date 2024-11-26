@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const db = require('../database/db');
 const router = express.Router();
-import { config } from '../config';
 
 
 router.post('/register', async (req, res) => {
