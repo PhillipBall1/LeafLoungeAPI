@@ -11,7 +11,13 @@ const db = require('./database/db');
 const app = express();
 
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://phillipball1.github.io', 
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization', 
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 async function startServer() {
